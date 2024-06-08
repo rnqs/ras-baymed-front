@@ -1,11 +1,13 @@
-import { json, MetaFunction } from "@remix-run/node"
-import { Link, useLoaderData, useNavigate } from "@remix-run/react"
+import { MetaFunction } from "@remix-run/node"
+import { Link, useNavigate } from "@remix-run/react"
 import { useState } from "react"
 
 import { Card, CardContent } from "~/components/ui/card"
 import { Label } from "~/components/ui/label"
 import { Input } from "~/components/ui/input"
 import { Button } from "~/components/ui/button"
+
+import { API_URL } from "~/consts"
 
 export const meta: MetaFunction = () => {
   return [
@@ -14,12 +16,7 @@ export const meta: MetaFunction = () => {
   ]
 }
 
-export const loader = async () => {
-  return json({ apiUrl: process.env.API_URL })
-}
-
 export default function Index() {
-  const { apiUrl } = useLoaderData<typeof loader>()
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const navigate = useNavigate()
@@ -31,13 +28,13 @@ export default function Index() {
     formData.append("username", username)
     formData.append("password", password)
 
-    const response = await fetch(`${apiUrl}/auth/login`, {
+    const response = await fetch(`${API_URL}/auth/login`, {
       method: "POST",
       body: formData,
     })
 
     if (response.ok) {
-      navigate("/dashboard")
+      navigate("/nurse")
     } else {
       console.error("Login failed")
     }

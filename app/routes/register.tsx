@@ -1,5 +1,5 @@
-import { json, MetaFunction } from "@remix-run/node"
-import { useLoaderData, useNavigate } from "@remix-run/react"
+import { MetaFunction } from "@remix-run/node"
+import { useNavigate } from "@remix-run/react"
 import { useRef, useState } from "react"
 
 import { Card, CardContent } from "~/components/ui/card"
@@ -8,6 +8,8 @@ import { Input } from "~/components/ui/input"
 import { Button } from "~/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
 
+import { API_URL } from "~/consts"
+
 export const meta: MetaFunction = () => {
   return [
     { title: "BayMed" },
@@ -15,14 +17,9 @@ export const meta: MetaFunction = () => {
   ]
 }
 
-export const loader = async () => {
-  return json({ apiUrl: process.env.API_URL })
-}
-
 export default function Register() {
   const dddRef = useRef<HTMLInputElement>(null)
   const phoneRef = useRef<HTMLInputElement>(null)
-  const { apiUrl } = useLoaderData<typeof loader>()
   const [name, setName] = useState("")
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
@@ -59,7 +56,7 @@ export default function Register() {
     }
 
     try {
-      const response = await fetch(`${apiUrl}${endpoint}`, {
+      const response = await fetch(`${API_URL}${endpoint}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
