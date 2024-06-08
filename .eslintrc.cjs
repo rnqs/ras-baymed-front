@@ -29,12 +29,7 @@ module.exports = {
     {
       files: ["**/*.{js,jsx,ts,tsx}"],
       plugins: ["react", "jsx-a11y"],
-      extends: [
-        "plugin:react/recommended",
-        "plugin:react/jsx-runtime",
-        "plugin:react-hooks/recommended",
-        "plugin:jsx-a11y/recommended",
-      ],
+      extends: ["plugin:react/recommended", "plugin:react/jsx-runtime", "plugin:react-hooks/recommended", "plugin:jsx-a11y/recommended"],
       settings: {
         react: {
           version: "detect",
@@ -66,11 +61,7 @@ module.exports = {
           },
         },
       },
-      extends: [
-        "plugin:@typescript-eslint/recommended",
-        "plugin:import/recommended",
-        "plugin:import/typescript",
-      ],
+      extends: ["plugin:@typescript-eslint/recommended", "plugin:import/recommended", "plugin:import/typescript"],
     },
 
     // Node
@@ -78,6 +69,16 @@ module.exports = {
       files: [".eslintrc.cjs"],
       env: {
         node: true,
+      },
+    },
+
+    // Chadcn/ui
+    {
+      files: ["**/components/ui/*.tsx"],
+      rules: {
+        "react/prop-types": [2, { ignore: ["className"] }],
+        "react-refresh/only-export-components": "off",
+        "jsx-a11y/heading-has-content": "off",
       },
     },
   ],
