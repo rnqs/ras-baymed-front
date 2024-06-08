@@ -79,7 +79,7 @@ export default function Register() {
 
   return (
     <div className="flex min-h-screen bg-gray-100 justify-center items-center">
-      <Card className="w-full max-w-sm">
+      <Card className="w-full max-w-sm m-4">
         <CardContent className="flex flex-col space-y-8">
           <div className="flex flex-col mt-4 space-y-2 -mb-2">
             <h1 className="text-2xl font-bold">Criar uma conta</h1>
@@ -116,7 +116,8 @@ export default function Register() {
                   ref={phoneRef}
                   id="phone"
                   placeholder="999999999"
-                  type="number"
+                  type="text"
+                  pattern="\d*"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                   onKeyDown={(e) => {
@@ -144,7 +145,10 @@ export default function Register() {
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
-            <Tabs defaultValue="nurse" className="flex flex-col">
+            <Tabs defaultValue="nurse" className="flex flex-col" onValueChange={() => {
+              setId("")
+              setSpecialty("")
+            }}>
               <TabsList>
                 <TabsTrigger value="nurse" className="flex-1">Enfermeiro</TabsTrigger>
                 <TabsTrigger value="doctor" className="flex-1">Médico</TabsTrigger>

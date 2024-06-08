@@ -45,7 +45,7 @@ export default function Index() {
 
   return (
     <div className="flex min-h-screen bg-gray-100 justify-center items-center">
-      <Card className="w-full max-w-sm">
+      <Card className="w-full max-w-sm m-4">
         <CardContent className="flex flex-col items-center space-y-8">
           <div className="flex flex-col items-center">
             <img src="/icon.png" alt="BayMed Logo" className="h-20 w-20 mt-4" />

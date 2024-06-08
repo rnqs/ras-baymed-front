@@ -60,7 +60,7 @@ export default function RegisterPatient() {
 
   return (
     <div className="flex min-h-screen bg-gray-100 justify-center items-center">
-      <Card className="w-full max-w-sm">
+      <Card className="w-full max-w-sm m-4">
         <CardContent className="flex flex-col space-y-8">
           <div className="flex flex-col mt-4 space-y-2 -mb-2">
             <h1 className="text-2xl font-bold">Cadastrar um paciente</h1>
