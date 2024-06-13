@@ -21,7 +21,7 @@ export default function AppointmentForm() {
 
     try {
       const body = JSON.stringify({
-        dateTime: new Date().toISOString().split("T")[0],
+        dateTime: new Date().toISOString(),
         status: "PENDING",
         symptoms,
         patient,
