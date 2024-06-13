@@ -30,11 +30,16 @@ export default function Index() {
 
     const response = await fetch(`${API_URL}/auth/login`, {
       method: "POST",
+      credentials: "include",
       body: formData,
     })
 
     if (response.ok) {
-      navigate("/nurse")
+      const data = await response.json()
+      const role = data[0]?.authority
+      if (role === "ROLE_DOCTOR") return navigate("/doctor")
+      if (role === "ROLE_NURSE") return navigate("/nurse")
+      throw new Error("Invalid role")
     } else {
       console.error("Login failed")
     }

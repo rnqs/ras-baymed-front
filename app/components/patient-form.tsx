@@ -1,10 +1,12 @@
-import { useNavigate } from "@remix-run/react"
 import { useState } from "react"
 
 import { Button } from "~/components/ui/button"
 import { Card, CardContent } from "~/components/ui/card"
 import { Label } from "~/components/ui/label"
 import { Input } from "~/components/ui/input"
+
+import { formatDate } from "~/utils/formatDate"
+import { API_URL } from "~/consts"
 
 export default function PatientForm() {
   const [name, setName] = useState("")
@@ -13,35 +15,64 @@ export default function PatientForm() {
   const [companionName, setCompanionName] = useState("")
   const [companionDate, setCompanionDate] = useState("")
   const [companionCpf, setCompanionCpf] = useState("")
-  const navigate = useNavigate()
 
   const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
-  };
+    event.preventDefault()
+
+    try {
+      const body = JSON.stringify({
+        name,
+        cpf: Number(cpf),
+        birth: formatDate(date),
+        companion: {
+          name: companionName,
+          cpf: Number(companionCpf),
+          birth: formatDate(companionDate),
+        }
+      })
+
+      const response = await fetch(`${API_URL}/patients`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body,
+      })
+
+      if (response.ok) {
+        alert("Paciente cadastrado com sucesso")
+      } else {
+        console.error("Registration failed")
+      }
+    } catch (error) {
+      console.error("Error occurred:", error)
+    }
+  }
 
   const onChangeDate = (e: React.ChangeEvent<HTMLInputElement>, setState: (value: React.SetStateAction<string>) => void) => {
-    const inputDate = e.target.value.replace(/\D/g, '');
+    const inputDate = e.target.value.replace(/\D/g, '')
 
     if (inputDate.length <= 2) {
-      setState(inputDate);
+      setState(inputDate)
     } else if (inputDate.length <= 4) {
-      setState(`${inputDate.slice(0, 2)}/${inputDate.slice(2)}`);
+      setState(`${inputDate.slice(0, 2)}/${inputDate.slice(2)}`)
     } else {
-      setState(`${inputDate.slice(0, 2)}/${inputDate.slice(2, 4)}/${inputDate.slice(4, 8)}`);
+      setState(`${inputDate.slice(0, 2)}/${inputDate.slice(2, 4)}/${inputDate.slice(4, 8)}`)
     }
   }
 
   const onChangeCpf = (e: React.ChangeEvent<HTMLInputElement>, setState: (value: React.SetStateAction<string>) => void) => {
-    const inputCpf = e.target.value.replace(/\D/g, '');
+    const inputCpf = e.target.value.replace(/\D/g, '')
 
     if (inputCpf.length <= 3) {
-      setState(inputCpf);
+      setState(inputCpf)
     } else if (inputCpf.length <= 6) {
-      setState(`${inputCpf.slice(0, 3)}.${inputCpf.slice(3)}`);
+      setState(`${inputCpf.slice(0, 3)}.${inputCpf.slice(3)}`)
     } else if (inputCpf.length <= 9) {
-      setState(`${inputCpf.slice(0, 3)}.${inputCpf.slice(3, 6)}.${inputCpf.slice(6)}`);
+      setState(`${inputCpf.slice(0, 3)}.${inputCpf.slice(3, 6)}.${inputCpf.slice(6)}`)
     } else {
-      setState(`${inputCpf.slice(0, 3)}.${inputCpf.slice(3, 6)}.${inputCpf.slice(6, 9)}-${inputCpf.slice(9)}`);
+      setState(`${inputCpf.slice(0, 3)}.${inputCpf.slice(3, 6)}.${inputCpf.slice(6, 9)}-${inputCpf.slice(9)}`)
     }
   }
 

@@ -65,7 +65,7 @@ export default function Register() {
       });
 
       if (response.ok) {
-        navigate("/dashboard");
+        navigate("/");
       } else {
         console.error("Registration failed");
       }
@@ -142,9 +142,10 @@ export default function Register() {
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
-            <Tabs defaultValue="nurse" className="flex flex-col" onValueChange={() => {
+            <Tabs defaultValue="nurse" className="flex flex-col" onValueChange={(value) => {
+              if (value === "nurse") setSpecialty("")
+              else setSpecialty("SURGEON")
               setId("")
-              setSpecialty("")
             }}>
               <TabsList>
                 <TabsTrigger value="nurse" className="flex-1">Enfermeiro</TabsTrigger>
@@ -175,6 +176,7 @@ export default function Register() {
                   <div className="space-y-2">
                     <Label htmlFor="specialty">Especialidade</Label>
                     <Input
+                      disabled
                       id="specialty"
                       placeholder="Digite sua especialidade"
                       value={specialty}
