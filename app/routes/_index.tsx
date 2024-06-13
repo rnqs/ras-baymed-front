@@ -21,6 +21,29 @@ export default function Index() {
   const [password, setPassword] = useState("")
   const navigate = useNavigate()
 
+  const fetchCurrentDoctorId = async () => {
+    try {
+      const response = await fetch(`${API_URL}/doctors`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      })
+
+      if (response.ok) {
+        const data = await response.json()
+        const currentDoctorUsername = localStorage.getItem("username")
+        const doctor = data.find((nurse: any) => nurse?.user?.username === currentDoctorUsername)
+        localStorage.setItem("doctorId", doctor?.id)
+      } else {
+        console.error("Failed to fetch doctors")
+      }
+    } catch (error) {
+      console.error("Error occurred:", error)
+    }
+  }
+
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault()
 
@@ -40,8 +63,11 @@ export default function Index() {
         const role = data[0]?.authority
         localStorage.setItem("username", username)
         localStorage.setItem("role", role)
-        if (role === "ROLE_DOCTOR") return navigate("/doctor")
         if (role === "ROLE_NURSE") return navigate("/nurse")
+        if (role === "ROLE_DOCTOR") {
+          await fetchCurrentDoctorId()
+          return navigate("/doctor/appointments")
+        }
         throw new Error("Invalid role")
       } else {
         throw new Error("Login failed")

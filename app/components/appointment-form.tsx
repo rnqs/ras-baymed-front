@@ -14,7 +14,7 @@ export default function AppointmentForm() {
   const [nurse, setNurse] = useState({})
   const [doctor, setDoctor] = useState({})
   const [patient, setPatient] = useState({})
-  const [symptoms, setSymptoms] = useState({})
+  const [symptoms, setSymptoms] = useState([{}])
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault()
@@ -23,7 +23,10 @@ export default function AppointmentForm() {
       const body = JSON.stringify({
         dateTime: new Date().toISOString(),
         status: "PENDING",
-        symptoms,
+        symptoms: symptoms.map((symptom) => ({
+          ...symptom,
+          symptomKey: symptom.key
+        })),
         patient,
         doctor,
         nurse,
