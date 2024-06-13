@@ -6,7 +6,7 @@ import { Label } from "~/components/ui/label"
 import { Input } from "~/components/ui/input"
 
 import { formatDate } from "~/utils/formatDate"
-import { API_URL } from "~/consts"
+import { API_URL } from "~/constants/api"
 
 export default function PatientForm() {
   const [name, setName] = useState("")
@@ -22,11 +22,11 @@ export default function PatientForm() {
     try {
       const body = JSON.stringify({
         name,
-        cpf: Number(cpf),
+        cpf: Number(cpf.replace(/\D/g, "")),
         birth: formatDate(date),
         companion: {
           name: companionName,
-          cpf: Number(companionCpf),
+          cpf: Number(companionCpf.replace(/\D/g, "")),
           birth: formatDate(companionDate),
         }
       })

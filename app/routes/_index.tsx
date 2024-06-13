@@ -7,7 +7,7 @@ import { Label } from "~/components/ui/label"
 import { Input } from "~/components/ui/input"
 import { Button } from "~/components/ui/button"
 
-import { API_URL } from "~/consts"
+import { API_URL } from "~/constants/api"
 
 export const meta: MetaFunction = () => {
   return [
@@ -28,20 +28,27 @@ export default function Index() {
     formData.append("username", username)
     formData.append("password", password)
 
-    const response = await fetch(`${API_URL}/auth/login`, {
-      method: "POST",
-      credentials: "include",
-      body: formData,
-    })
+    try {
+      const response = await fetch(`${API_URL}/auth/login`, {
+        method: "POST",
+        credentials: "include",
+        body: formData,
+      })
 
-    if (response.ok) {
-      const data = await response.json()
-      const role = data[0]?.authority
-      if (role === "ROLE_DOCTOR") return navigate("/doctor")
-      if (role === "ROLE_NURSE") return navigate("/nurse")
-      throw new Error("Invalid role")
-    } else {
-      console.error("Login failed")
+      if (response.ok) {
+        const data = await response.json()
+        const role = data[0]?.authority
+        localStorage.setItem("username", username)
+        localStorage.setItem("role", role)
+        if (role === "ROLE_DOCTOR") return navigate("/doctor")
+        if (role === "ROLE_NURSE") return navigate("/nurse")
+        throw new Error("Invalid role")
+      } else {
+        throw new Error("Login failed")
+      }
+    } catch (error) {
+      localStorage.clear()
+      console.error(error)
     }
   }
 

@@ -8,7 +8,7 @@ import { Input } from "~/components/ui/input"
 import { Button } from "~/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
 
-import { API_URL } from "~/consts"
+import { API_URL } from "~/constants/api"
 
 export const meta: MetaFunction = () => {
   return [
