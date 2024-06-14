@@ -49,7 +49,7 @@ export default function Doctor() {
   }, [])
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-100 items-center p-4 space-y-4">
+    <div className="flex flex-col min-h-screen bg-gray-100 items-center p-4 space-y-2">
       <div className="flex flex-col items-center">
         <img src="/icon.png" alt="BayMed Logo" className="h-20 w-20 my-8" />
       </div>
