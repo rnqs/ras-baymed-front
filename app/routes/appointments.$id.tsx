@@ -2,6 +2,7 @@ import { json, useLoaderData } from "@remix-run/react"
 import { LoaderFunctionArgs, MetaFunction } from "@remix-run/node"
 import { useEffect, useState } from "react"
 
+import { Badge } from "~/components/ui/badge"
 import { Card, CardContent } from "~/components/ui/card"
 
 import { API_URL } from "~/constants/api"
@@ -85,91 +86,110 @@ export default function AppointmentDetails() {
         <img src="/icon.png" alt="BayMed Logo" className="h-20 w-20 my-8" />
       </div>
       {appointment && (
-        <>
-          <Card className="w-full max-w-md" key={appointment.id}>
-            <CardContent className="flex flex-col space-y-8">
-              <div className="flex flex-col mt-4 space-y-2 -mb-2">
-                <h1 className="text-lg font-bold">Paciente</h1>
+        <div className="w-full flex flex-1 flex-col max-w-md md:flex-row md:max-w-2xl gap-2">
+          <div className="flex flex-1 flex-col gap-2">
+            <Card className="w-full" key={appointment.id}>
+              <CardContent className="flex flex-col space-y-8">
+                <div className="flex flex-col mt-4 space-y-2 -mb-2">
+                  <h1 className="text-lg font-bold">Prognóstico</h1>
 
-                <div className="flex flex-col">
-                  <div className="flex justify-between py-2 border-b-[1px] border-gray-100">
-                    <p className="text-sm font-light">Nome</p>
-                    <p className="text-sm">{appointment.patient.name}</p>
-                  </div>
-                  <div className="flex justify-between py-2 border-b-[1px] border-gray-100">
-                    <p className="text-sm font-light">CPF</p>
-                    <p className="text-sm">{formatCPF(String(appointment.patient.cpf))}</p>
-                  </div>
-                  <div className="flex justify-between py-2">
-                    <p className="text-sm font-light">Data de nascimento</p>
-                    <p className="text-sm">{formatDate(new Date(appointment.patient.birth))}</p>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-          <Card className="w-full max-w-md" key={appointment.id}>
-            <CardContent className="flex flex-col space-y-8">
-              <div className="flex flex-col mt-4 space-y-2 -mb-2">
-                <h1 className="text-lg font-bold">Acompanhante</h1>
-
-                <div className="flex flex-col">
-                  <div className="flex justify-between py-2 border-b-[1px] border-gray-100">
-                    <p className="text-sm font-light">Nome</p>
-                    <p className="text-sm">{appointment.patient.companion.name}</p>
-                  </div>
-                  <div className="flex justify-between py-2 border-b-[1px] border-gray-100">
-                    <p className="text-sm font-light">CPF</p>
-                    <p className="text-sm">{formatCPF(String(appointment.patient.companion.cpf))}</p>
-                  </div>
-                  <div className="flex justify-between py-2">
-                    <p className="text-sm font-light">Data de nascimento</p>
-                    <p className="text-sm">{formatDate(new Date(appointment.patient.companion.birth))}</p>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-          <Card className="w-full max-w-md" key={appointment.id}>
-            <CardContent className="flex flex-col space-y-8">
-              <div className="flex flex-col mt-4 space-y-2 -mb-2">
-                <h1 className="text-lg font-bold">Enfermeiro</h1>
-
-                <div className="flex flex-col">
-                  <div className="flex justify-between py-2 border-b-[1px] border-gray-100">
-                    <p className="text-sm font-light">Nome</p>
-                    <p className="text-sm">{appointment.nurse.name}</p>
-                  </div>
-                  <div className="flex justify-between py-2">
-                    <p className="text-sm font-light">Coren</p>
-                    <p className="text-sm">{appointment.nurse.coren}</p>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-          <Card className="w-full max-w-md" key={appointment.id}>
-            <CardContent className="flex flex-col space-y-8">
-              <div className="flex flex-col mt-4 space-y-2 -mb-2">
-                <h1 className="text-lg font-bold">Prognóstico</h1>
-
-                <div className="flex flex-col">
-                  <div className="flex justify-between py-2">
-                    <p className="text-sm font-light">Sintomas</p>
-                    <p className="text-sm">{appointment.symptoms.map(symptom => symptom.ptbr).join(', ')}</p>
-                  </div>
-                  {prognostic && prognostic.map((item) => (
-                    <div className="flex justify-between py-2 border-t-[1px] border-gray-100" key={item.id}>
-                      <p className="text-sm font-light">{item.method}</p>
-                      <p className="text-sm">{item.prognosis.ptbr}</p>
+                  <div className="flex flex-col">
+                    <div className="flex justify-between py-2">
+                      <p className="text-sm font-light">Sintomas</p>
+                      <div className="flex flex-wrap justify-end gap-1">
+                        {appointment.symptoms.map(symptom => (
+                          <Badge key={symptom.symptomKey} variant="secondary">
+                            {symptom.ptbr}
+                          </Badge>
+                        ))}
+                      </div>
                     </div>
-                  ))}
+                    {prognostic && (
+                      <>
+                        <div className="flex justify-between py-2 mt-4 border-gray-100">
+                          <p className="text-sm font-light">Doença</p>
+                          <p className="text-[12px]">Precisão: {prognostic[0].accuracy}%</p>
+                        </div>
+                        {prognostic.map((item) => (
+                          <div className="flex justify-between py-2 border-t-[1px] border-gray-100" key={item.id}>
+                            <p className="text-sm font-light">{item.method}</p>
+                            <p className="text-sm text-right">{item.prognosis.ptbr}</p>
+                          </div>
+                        ))}
+                      </>
+                    )}
+                  </div>
                 </div>
-              </div>
-            </CardContent>
-          </Card>
-        </>
-      )}
-    </div>
+              </CardContent>
+            </Card>
+          </div>
+          <div className="flex flex-1 flex-col gap-2">
+            <Card className="w-full" key={appointment.id}>
+              <CardContent className="flex flex-col space-y-8">
+                <div className="flex flex-col mt-4 space-y-2 -mb-2">
+                  <h1 className="text-lg font-bold">Enfermeiro</h1>
+
+                  <div className="flex flex-col">
+                    <div className="flex justify-between py-2 border-b-[1px] border-gray-100">
+                      <p className="text-sm font-light">Nome</p>
+                      <p className="text-sm">{appointment.nurse.name}</p>
+                    </div>
+                    <div className="flex justify-between py-2">
+                      <p className="text-sm font-light">Coren</p>
+                      <p className="text-sm">{appointment.nurse.coren}</p>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+            <Card className="w-full" key={appointment.id}>
+              <CardContent className="flex flex-col space-y-8">
+                <div className="flex flex-col mt-4 space-y-2 -mb-2">
+                  <h1 className="text-lg font-bold">Paciente</h1>
+
+                  <div className="flex flex-col">
+                    <div className="flex justify-between py-2 border-b-[1px] border-gray-100">
+                      <p className="text-sm font-light">Nome</p>
+                      <p className="text-sm">{appointment.patient.name}</p>
+                    </div>
+                    <div className="flex justify-between py-2 border-b-[1px] border-gray-100">
+                      <p className="text-sm font-light">CPF</p>
+                      <p className="text-sm">{formatCPF(String(appointment.patient.cpf))}</p>
+                    </div>
+                    <div className="flex justify-between py-2">
+                      <p className="text-sm font-light">Data de nascimento</p>
+                      <p className="text-sm">{formatDate(new Date(appointment.patient.birth))}</p>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+            <Card className="w-full" key={appointment.id}>
+              <CardContent className="flex flex-col space-y-8">
+                <div className="flex flex-col mt-4 space-y-2 -mb-2">
+                  <h1 className="text-lg font-bold">Acompanhante</h1>
+
+                  <div className="flex flex-col">
+                    <div className="flex justify-between py-2 border-b-[1px] border-gray-100">
+                      <p className="text-sm font-light">Nome</p>
+                      <p className="text-sm">{appointment.patient.companion.name}</p>
+                    </div>
+                    <div className="flex justify-between py-2 border-b-[1px] border-gray-100">
+                      <p className="text-sm font-light">CPF</p>
+                      <p className="text-sm">{formatCPF(String(appointment.patient.companion.cpf))}</p>
+                    </div>
+                    <div className="flex justify-between py-2">
+                      <p className="text-sm font-light">Data de nascimento</p>
+                      <p className="text-sm">{formatDate(new Date(appointment.patient.companion.birth))}</p>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      )
+      }
+    </div >
   )
 }

@@ -2,6 +2,7 @@ import { useNavigate } from "@remix-run/react"
 import { MetaFunction } from "@remix-run/node"
 import { useEffect, useState } from "react"
 
+import { Badge } from "~/components/ui/badge"
 import { Button } from "~/components/ui/button"
 import { Card, CardContent } from "~/components/ui/card"
 
@@ -69,7 +70,13 @@ export default function Doctor() {
                 </div>
                 <div className="flex justify-between py-2">
                   <p className="text-sm font-light">Sintomas</p>
-                  <p className="text-sm">{appointment.symptoms.map(symptom => symptom.ptbr).join(', ')}</p>
+                  <div className="flex flex-wrap justify-end gap-1">
+                    {appointment.symptoms.map(symptom => (
+                      <Badge key={symptom.symptomKey} variant="secondary">
+                        {symptom.ptbr}
+                      </Badge>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
