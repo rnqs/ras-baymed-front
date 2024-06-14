@@ -66,7 +66,7 @@ export default function Index() {
         if (role === "ROLE_NURSE") return navigate("/nurse")
         if (role === "ROLE_DOCTOR") {
           await fetchCurrentDoctorId()
-          return navigate("/doctor/appointments")
+          return navigate("/doctor")
         }
         throw new Error("Invalid role")
       } else {
